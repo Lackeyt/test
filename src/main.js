@@ -10,7 +10,7 @@ async function exchangeRateResponse() {
     return 'There has been an error processing your request';
   } else {
     if (responseObject.result === "error"){
-      return responseObject[1].val();
+      return responseObject["error-type"];
     } else if (responseObject.result === "success") {
       let conversionRates = responseObject.conversion_rates;
       return conversionRates;
@@ -21,6 +21,10 @@ async function exchangeRateResponse() {
 $(document).ready(async function() {
   //User Interface
   let response = await exchangeRateResponse();
-  $("output").html(`${response}`);
+  $("#usdEntry").submit(function(event){
+    event.preventDefault()
+
+  })
+  $("#output").html(`${await response}`);
 });
 

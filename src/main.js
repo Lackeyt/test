@@ -4,27 +4,28 @@ import './styles.css';
 import $ from "jquery";
 import {exchangeRateCall} from './exchangeRateCall.js';
 
-async function exchangeRateResponse() {
+async function exchangeRateResponse(usd, currency) {
   const responseObject = await exchangeRateCall(); // blocking // api call
   if(!responseObject) {
-    return 'There has been an error processing your request';
+    $("#output").html(`There has been an error processing your request`);
   } else {
     if (responseObject.result === "error"){
-      return responseObject["error-type"];
+      $("#output").html(`${responseObject["error-type"]}`);
     } else if (responseObject.result === "success") {
       let conversionRates = responseObject.conversion_rates;
-      return conversionRates;
+      let convertedCurrency = usd * conversionRates[currency]
+      $("#output").html(`$${usd} = ${convertedCurrency} ${currency}`);
     }
   }
 }
 
-$(document).ready(async function() {
+$(document).ready(function() {
   //User Interface
-  let response = await exchangeRateResponse();
   $("#usdEntry").submit(function(event){
-    event.preventDefault()
-
+    event.preventDefault();
+    let USD = $("#usd").val();
+    let currency = $("#curList").val();
+    exchangeRateResponse(USD, currency);
   })
-  $("#output").html(`${await response}`);
 });
 

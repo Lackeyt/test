@@ -12,21 +12,26 @@ async function exchangeRateResponse(amount, currencyFrom, currencyTo) {
     if (responseObject.result === "error"){
       $("#output").html(`The request returned an error: ${responseObject["error-type"]}`);
     } else if (responseObject.result === "success") {
-      let conversionRate = responseObject.conversion_rates[currencyTo] / responseObject.conversion_rates[currencyFrom]
-      let convertedCurrency = (amount * conversionRate).toFixed(4)
-      $("#output").html(`${amount} ${currencyFrom} = ${convertedCurrency} ${currencyTo}`);
+      if (isNaN(parseInt(amount))){
+        $("#output").html(`Please enter a number for currency amount`)
+      } else {
+        let conversionRate = responseObject.conversion_rates[currencyTo] / responseObject.conversion_rates[currencyFrom]
+        let convertedCurrency = (amount * conversionRate).toFixed(2)
+        $("#output").html(`${amount} ${currencyFrom} = ${convertedCurrency} ${currencyTo}`);
+      }
     }
   }
 }
 
 $(document).ready(function() {
   //User Interface
-  $("#usdEntry").submit(function(event){
+  $("#usdEntry").submit(async function(event){
     event.preventDefault();
     let amount = $("#amount").val();
     let currencyFrom = $("#curListFrom").val();
     let currencyTo = $("#curListTo").val();
-    exchangeRateResponse(amount, currencyFrom, currencyTo);
+    exchangeRateResponse(amount, currencyFrom, currencyTo)
+
   })
 });
 

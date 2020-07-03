@@ -1,3 +1,4 @@
+//user interface
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles.css';
@@ -13,10 +14,10 @@ async function exchangeRateResponse(amount, currencyFrom, currencyTo) {
       $("#output").html(`The request returned an error: ${responseObject["error-type"]}`);
     } else if (responseObject.result === "success") {
       if (isNaN(parseInt(amount))){
-        $("#output").html(`Please enter a number for currency amount`)
+        $("#output").html(`Please enter a number for currency amount`);
       } else {
-        let conversionRate = responseObject.conversion_rates[currencyTo] / responseObject.conversion_rates[currencyFrom]
-        let convertedCurrency = (amount * conversionRate).toFixed(2)
+        let conversionRate = responseObject.conversion_rates[currencyTo] / responseObject.conversion_rates[currencyFrom];
+        let convertedCurrency = (amount * conversionRate).toFixed(2);
         $("#output").html(`${amount} ${currencyFrom} = ${convertedCurrency} ${currencyTo}`);
       }
     }
@@ -24,14 +25,12 @@ async function exchangeRateResponse(amount, currencyFrom, currencyTo) {
 }
 
 $(document).ready(function() {
-  //User Interface
   $("#usdEntry").submit(async function(event){
     event.preventDefault();
     let amount = $("#amount").val();
     let currencyFrom = $("#curListFrom").val();
     let currencyTo = $("#curListTo").val();
-    exchangeRateResponse(amount, currencyFrom, currencyTo)
-
-  })
+    exchangeRateResponse(amount, currencyFrom, currencyTo);
+  });
 });
 

@@ -4,7 +4,7 @@ import './styles.css';
 import $ from "jquery";
 import {exchangeRateCall} from './exchangeRateCall.js';
 
-async function exchangeRateResponse(usd, currency) {
+async function exchangeRateResponse(amount, currencyFrom, currencyTo) {
   const responseObject = await exchangeRateCall(); // blocking // api call
   if(!responseObject) {
     $("#output").html(`There has been an error processing your request`);
@@ -13,8 +13,8 @@ async function exchangeRateResponse(usd, currency) {
       $("#output").html(`The request returned an error: ${responseObject["error-type"]}`);
     } else if (responseObject.result === "success") {
       let conversionRates = responseObject.conversion_rates;
-      let convertedCurrency = usd * conversionRates[currency]
-      $("#output").html(`$${usd} = ${convertedCurrency} ${currency}`);
+      let convertedCurrency = amount * conversionRates[currencyTo]
+      $("#output").html(`$${amount} = ${convertedCurrency} ${currencyTo}`);
     }
   }
 }

@@ -4,7 +4,7 @@ import './styles.css';
 import $ from "jquery";
 import {exchangeRateCall} from './exchangeRateCall.js';
 
-async function exchangeRateResponse(usd, currency) {
+async function exchangeRateResponse(amount, currencyFrom, currencyTo) {
   const responseObject = await exchangeRateCall(); // blocking // api call
   if(!responseObject) {
     $("#output").html(`There has been an error processing your request`);
@@ -12,9 +12,9 @@ async function exchangeRateResponse(usd, currency) {
     if (responseObject.result === "error"){
       $("#output").html(`The request returned an error: ${responseObject["error-type"]}`);
     } else if (responseObject.result === "success") {
-      let conversionRates = responseObject.conversion_rates;
-      let convertedCurrency = usd * conversionRates[currency]
-      $("#output").html(`$${usd} = ${convertedCurrency} ${currency}`);
+      let conversionRate = responseObject.conversion_rates[currencyTo] / responseObject.conversion_rates[currencyFrom]
+      let convertedCurrency = (amount * conversionRate).toFixed(4)
+      $("#output").html(`${amount} ${currencyFrom} = ${convertedCurrency} ${currencyTo}`);
     }
   }
 }
@@ -23,9 +23,10 @@ $(document).ready(function() {
   //User Interface
   $("#usdEntry").submit(function(event){
     event.preventDefault();
-    let USD = $("#usd").val();
-    let currency = $("#curList").val();
-    exchangeRateResponse(USD, currency);
+    let amount = $("#amount").val();
+    let currencyFrom = $("#curListFrom").val();
+    let currencyTo = $("#curListTo").val();
+    exchangeRateResponse(amount, currencyFrom, currencyTo);
   })
 });
 

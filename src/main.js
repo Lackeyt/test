@@ -10,7 +10,7 @@ async function exchangeRateResponse(usd, currency) {
     $("#output").html(`There has been an error processing your request`);
   } else {
     if (responseObject.result === "error"){
-      $("#output").html(`${responseObject["error-type"]}`);
+      $("#output").html(`The request returned an error: ${responseObject["error-type"]}`);
     } else if (responseObject.result === "success") {
       let conversionRates = responseObject.conversion_rates;
       let convertedCurrency = usd * conversionRates[currency]
